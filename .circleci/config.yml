@@ -1,0 +1,21 @@
+# YML is based on spacing and indentation
+
+# This identifies the circleci configuration file version
+version: 2.1
+
+# Steps/Jobs are the individual tasks that CircleCI will execute
+jobs:
+  # hello-world-job is the name of the job
+  hello-world-job:
+    # docker is the environment in which the job will run
+    docker:
+      # cimg/base:current is the Docker image to use
+      - image: cimg/base:current
+    steps:
+      - run: echo "Hello, World!"
+
+# Workflows are the collection of jobs that CircleCI will execute
+workflows:
+  hello-world-workflow:
+    jobs:
+      - hello-world-job

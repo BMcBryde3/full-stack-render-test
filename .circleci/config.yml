@@ -1,21 +1,25 @@
-# YML is based on spacing and indentation
-
-# This identifies the circleci configuration file version
 version: 2.1
+# Make sure to add MONGODB_URI to ENVIRONMENT VARIABLES in CircleCI so that the tests can connect to the database
+orbs:
+  cypress: cypress-io/cypress@3.3.1
 
-# Steps/Jobs are the individual tasks that CircleCI will execute
 jobs:
-  # hello-world-job is the name of the job
-  hello-world-job:
-    # docker is the environment in which the job will run
+  start-server:
     docker:
-      # cimg/base:current is the Docker image to use
-      - image: cimg/base:current
+      - image: cypress/base:latest
     steps:
-      - run: echo "Hello, World!"
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build the app
+          command: npm run build
 
-# Workflows are the collection of jobs that CircleCI will execute
 workflows:
-  hello-world-workflow:
+  run-tests:
     jobs:
-      - hello-world-job
+      - start-server
+      - cypress/run:
+          name: run-component-tests
+          cypress-command: npx cypress run --component
